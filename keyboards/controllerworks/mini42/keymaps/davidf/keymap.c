@@ -952,13 +952,13 @@ bool oled_task_user(void) {
 
 static void init_tap_dance( void ) {
     vial_tap_dance_entry_t tapdances[] = {
-        { KC_A, KC_ACIR, CA_AGRV, KC_NO,   TAPPING_TERM },
-        { KC_E, KC_ECIR, CA_EGRV, KC_EDIA, TAPPING_TERM },
-        { KC_I, KC_ICIR, KC_NO,   KC_IDIA, TAPPING_TERM },
-        { KC_O, KC_OCIR, KC_NO,   KC_NO,   TAPPING_TERM },
-        { KC_U, KC_UCIR, CA_UGRV, KC_UDIA, TAPPING_TERM },
-        { KC_Y, KC_NO,   KC_NO,   KC_YDIA, TAPPING_TERM },
-        { KC_C, KC_NO,   CA_CCED, KC_NO,   TAPPING_TERM }
+        { KC_A, KC_ACIR, KC_NO, KC_NO,   TAPPING_TERM },
+        { KC_E, KC_ECIR, KC_NO, KC_EDIA, TAPPING_TERM },
+        { KC_I, KC_ICIR, KC_NO, KC_IDIA, TAPPING_TERM },
+        { KC_O, KC_OCIR, KC_NO, KC_NO,   TAPPING_TERM },
+        { KC_U, KC_UCIR, KC_NO, KC_UDIA, TAPPING_TERM },
+        { KC_Y, KC_NO,   KC_NO, KC_YDIA, TAPPING_TERM },
+        { KC_C, KC_NO,   KC_NO, KC_NO,   TAPPING_TERM }
     };
     int num_td = sizeof(tapdances) / sizeof(vial_tap_dance_entry_t);
 
