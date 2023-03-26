@@ -39,24 +39,22 @@ typedef enum {
 #else
     KC_OSMODE = SAFE_RANGE,
 #endif
-    KC_VERTICAL_BAR,        // USER01
-    KC_MISSION_CONTROL,     // USER02
-    KC_LAUNCHPAD,           // USER03
-    KC_ANIMATE,             // USER04
-    KC_A_CIRCUMFLEX,        // USER05
-    KC_E_CIRCUMFLEX,        // USER06
-    KC_E_DIAERESIS,         // USER07
-    KC_I_CIRCUMFLEX,        // USER08
-    KC_I_DIAERESIS,         // USER09
-    KC_O_CIRCUMFLEX,        // USER10
-    KC_U_CIRCUMFLEX,        // USER11
-    KC_U_DIAERESIS,         // USER12
-    KC_Y_DIAERESIS          // USER13
+    KC_MISSION_CONTROL,     // USER01
+    KC_LAUNCHPAD,           // USER02
+    KC_ANIMATE,             // USER03
+    KC_A_CIRCUMFLEX,        // USER04
+    KC_E_CIRCUMFLEX,        // USER05
+    KC_E_DIAERESIS,         // USER06
+    KC_I_CIRCUMFLEX,        // USER07
+    KC_I_DIAERESIS,         // USER08
+    KC_O_CIRCUMFLEX,        // USER09
+    KC_U_CIRCUMFLEX,        // USER10
+    KC_U_DIAERESIS,         // USER11
+    KC_Y_DIAERESIS          // USER12
 } custom_keycodes_t;
 
-#define KC_VBAR KC_VERTICAL_BAR 
-#define KC_MSCT KC_MISSION_CONTROL 
-#define KC_LCPD KC_LAUNCHPAD
+#define KC_MCTL KC_MISSION_CONTROL 
+#define KC_LPAD KC_LAUNCHPAD
 #define KC_ANIM KC_ANIMATE
 #define KC_ACIR KC_A_CIRCUMFLEX
 #define KC_ECIR KC_E_CIRCUMFLEX
@@ -73,14 +71,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT_split_3x6_3(
       KC_ESC,          KC_Q,        KC_W,          KC_E,           KC_R,          KC_T,                KC_Y,             KC_U,          KC_I,          KC_O,          KC_P,          KC_MINS,
       MO(LAYER_SUPER), KC_A,        KC_S,          KC_D,           KC_F,          KC_G,                KC_H,             KC_J,          KC_K,          KC_L,          KC_SCLN,       MO(LAYER_SUPER),
-      OSM(MOD_LSFT),   KC_Z,        KC_X,          KC_C,           KC_V,          KC_B,                KC_N,             KC_M,          KC_COMMA,      KC_DOT,        CA_EACU,       OSM(MOD_RSFT),
-                                                   FN_MO13,        KC_BSPC,       LCTL_T(KC_TAB),      KC_ENTER,         KC_SPACE,      FN_MO23
+      OSM(MOD_LSFT),   KC_Z,        KC_X,          KC_C,           KC_V,          KC_B,                KC_N,             KC_M,          KC_COMM,       KC_DOT,        CA_EACU,       OSM(MOD_RSFT),
+                                                   FN_MO13,        KC_BSPC,       LCTL_T(KC_TAB),      KC_ENT,           KC_SPC,        FN_MO23
   ),
 
   [LAYER_NAV] = LAYOUT_split_3x6_3(
       XXXXXXX,         XXXXXXX,     XXXXXXX,       XXXXXXX,        XXXXXXX,       XXXXXXX,             KC_PGUP,          KC_HOME,       KC_UP,         KC_END,        XXXXXXX,       XXXXXXX,
       XXXXXXX,         KC_MPRV,     KC_MNXT,       KC_VOLD,        KC_VOLU,       KC_MPLY,             KC_PGDN,          KC_LEFT,       KC_DOWN,       KC_RIGHT,      XXXXXXX,       XXXXXXX,
-      _______,         XXXXXXX,     KC_LGUI,       KC_LCTL,        KC_LALT,       KC_MUTE,             XXXXXXX,          XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX ,      _______,
+      _______,         XXXXXXX,     KC_LGUI,       KC_LCTL,        KC_LALT,       KC_MUTE,             XXXXXXX,          XXXXXXX,       KC_WH_U,       KC_WH_D,       XXXXXXX ,      _______,
                                                    _______,        _______,       _______,             _______,          _______,       _______
   ),
 
@@ -92,17 +90,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [LAYER_FUNC] = LAYOUT_split_3x6_3(
-      XXXXXXX,         KC_F11,      KC_F12,        KC_F13,         KC_F14,        KC_F15,              KC_F16,           KC_BRID,       KC_BRIU,       KC_MSCT,       KC_LCPD,       XXXXXXX,
+      XXXXXXX,         KC_F11,      KC_F12,        KC_F13,         KC_F14,        KC_F15,              KC_F16,           KC_BRID,       KC_BRIU,       KC_MCTL,       KC_LPAD,       XXXXXXX,
       XXXXXXX,         KC_F1,       KC_F2,         KC_F3,          KC_F4,         KC_F5,               KC_F6,            KC_F7,         KC_F8,         KC_F9,         KC_F10,        XXXXXXX,
       _______,         KC_PAUS,     KC_PSCR,       KC_NUM,         KC_SCRL,       RGB_TOG,             RGB_MOD,          RGB_HUI,       RGB_SAI,       RGB_VAI,       RGB_SPI,       _______,
                                                    _______,        _______,       _______,             _______,          _______,       _______
   ),
 
   [LAYER_SUPER] = LAYOUT_split_3x6_3(
-      XXXXXXX,         XXXXXXX,     CA_DIAE,       CA_EGRV,        CA_GRV,        KC_INS,              KC_DEL,           CA_UGRV,       CA_SLSH,       CA_CIRC,       KC_VBAR,       KC_EQL,
-      XXXXXXX,         CA_AGRV,     CA_DTIL,       CA_LABK,        CA_RABK,       CA_BSLS,             CA_SLSH,          CA_LCBR,       CA_RCBR,       CA_LBRC,       CA_RBRC,       CA_PLUS,
+      XXXXXXX,         XXXXXXX,     XXXXXXX,       CA_EGRV,        CA_DTIL,       KC_INS,              KC_DEL,           CA_UGRV,       CA_GRV,        CA_CIRC,       CA_DIAE,       KC_EQL,
+      XXXXXXX,         CA_AGRV,     CA_PIPE,       CA_LABK,        CA_RABK,       CA_BSLS,             CA_SLSH,          CA_LCBR,       CA_RCBR,       CA_LBRC,       CA_RBRC,       CA_PLUS,
       KC_CAPS,         CA_LDAQ,     CA_RDAQ,       CA_CCED,        XXXXXXX,       XXXXXXX,             KC_APP,           OSM(MOD_LGUI), OSM(MOD_LCTL), OSM(MOD_LALT), OSM(MOD_RALT), KC_CAPS,
-                                                   TG(LAYER_GAME), _______,       _______,             _______,          _______,       KC_OSMODE                                                  
+                                                   TG(LAYER_GAME), _______,       _______,             _______,          _______,       KC_OSMODE
   ),
 
   [LAYER_GAME] = LAYOUT_split_3x6_3(
@@ -1054,17 +1052,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
 
-        case KC_VERTICAL_BAR:
-            if (os_mode == MAC) {
-                // On the Mac CSA keyboard layout, vertical bar is just RALT+MINUS.
-                emit_key_event(RALT(KC_MINUS), record);
-            } else if (record->event.pressed) {
-                // On the Windows CSA keyboard layout, vertical bar is unavailable.
-                // So we swap to the US layout, type the vertical bar and swap back.
-                SEND_STRING(SS_LGUI(" ") SS_DELAY(100) "|" SS_LGUI(" "));
-            }
-            return false;
-
         // Single-stroke versions of keys that normally require deadkey composition.
         case KC_A_CIRCUMFLEX: return send_deadkey_event(CA_CIRC, KC_A, record);
         case KC_E_CIRCUMFLEX: return send_deadkey_event(CA_CIRC, KC_E, record);
@@ -1081,13 +1068,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case S(KC_NONUS_BACKSLASH): return swap_key_event(S(CA_SLSH), record);
         case CA_SLSH: return swap_key_event(KC_NONUS_BACKSLASH, record);
         case S(CA_SLSH): return swap_key_event(S(KC_NONUS_BACKSLASH), record);
+        case CA_PIPE: return swap_key_event(RALT(KC_MINUS), record);
 
+        // Suppress keys that confuse the selected OS.
+        case KC_PAUSE:
         case KC_SCROLL_LOCK:
-            if (os_mode == MAC) {
-                // Suppress scroll lock on Mac. The OS just gets confused.
-                return false;
-            }
-            break;
+            return (os_mode != MAC);
 
         case LCTL_T(KC_TAB):
             if (os_mode == MAC && !record->tap.count) {
