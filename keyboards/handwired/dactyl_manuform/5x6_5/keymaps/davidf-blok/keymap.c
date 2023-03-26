@@ -61,7 +61,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_EQL,          KC_A,        KC_S,            KC_D,            KC_F,            KC_G,                KC_H,             KC_J,              KC_K,              KC_L,            KC_SCLN,          CA_EGRV,
         KC_LSFT,         KC_Z,        KC_X,            KC_C,            KC_V,            KC_B,                KC_N,             KC_M,              KC_COMM,           KC_DOT,          CA_EACU,          KC_RSFT,
                          CA_UGRV,     CA_AGRV,   LT(LAYER_NAV,KC_BSPC), LCTL_T(KC_TAB),  KC_LALT,             KC_RALT,          KC_ENT,            KC_SPC,            CA_CIRC,         CA_CCED,
-                                                                        KC_LGUI,         KC_LCTL,             KC_RCTL,          MO(LAYER_FUNC)                                             
+                                                                        KC_LGUI,         KC_LCTL,             KC_RCTL,          MO(LAYER_FUNC)
     ),
 
     [LAYER_SUPER] = LAYOUT_5x6_5(
@@ -70,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX,         CA_AGRV,     CA_PIPE,         CA_LABK,         CA_RABK,         CA_BSLS,             CA_SLSH,          CA_LCBR,           CA_RCBR,           CA_LBRC,         CA_RBRC,          S(KC_EQL),
         KC_CAPS,         CA_LDAQ,     CA_RDAQ,         CA_CCED,         XXXXXXX,         XXXXXXX,             KC_APP,           XXXXXXX,           XXXXXXX,           XXXXXXX,         XXXXXXX,          KC_CAPS,
                          XXXXXXX,     XXXXXXX,         TG(LAYER_GAME),  XXXXXXX,         _______,             _______,          KC_OSMODE,         _______,           XXXXXXX,         XXXXXXX,
-                                                                        _______,         _______,             _______,          _______                                                  
+                                                                        _______,         _______,             _______,          _______
     ),
 
     [LAYER_FUNC] = LAYOUT_5x6_5(
@@ -79,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX,         KC_F1,       KC_F2,           KC_F3,           KC_F4,           KC_F5,               KC_F6,            KC_F7,             KC_F8,             KC_F9,           KC_F10,           XXXXXXX,
         KC_LSFT,         KC_PAUS,     KC_PSCR,         KC_NUM,          KC_SCRL,         XXXXXXX,             XXXXXXX,          XXXXXXX,           XXXXXXX,           XXXXXXX,         XXXXXXX,          KC_RSFT,
                          XXXXXXX,     XXXXXXX,         XXXXXXX,         XXXXXXX,         _______,             _______,          XXXXXXX,           XXXXXXX,           XXXXXXX,         XXXXXXX,
-                                                                        _______,         _______,             _______,          _______                                                  
+                                                                        _______,         _______,             _______,          _______
     ),
 
     [LAYER_NAV] = LAYOUT_5x6_5(
@@ -88,7 +88,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX,         KC_MPRV,     KC_MNXT,         KC_VOLD,         KC_VOLU,         KC_MPLY,             KC_PGDN,          KC_LEFT,           KC_DOWN,           KC_RGHT,         XXXXXXX,          XXXXXXX,
         _______,         XXXXXXX,     KC_LGUI,         KC_LCTL,         KC_LALT,         KC_MUTE,             XXXXXXX,          XXXXXXX,           XXXXXXX,           XXXXXXX,         XXXXXXX,          _______,
                          XXXXXXX,     XXXXXXX,         XXXXXXX,         XXXXXXX,         _______,             _______,          XXXXXXX,           XXXXXXX,           KC_WH_U,         KC_WH_D,
-                                                                        _______,         _______,             _______,          _______                                                  
+                                                                        _______,         _______,             _______,          _______
     ),
 
     [LAYER_GAME] = LAYOUT_5x6_5(
@@ -97,7 +97,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_CAPS,         KC_G,        KC_A,            KC_S,            KC_D,            KC_F,                KC_P0,            KC_P4,             KC_P5,             KC_P6,           KC_PMNS,          XXXXXXX,
         KC_LSFT,         KC_B,        KC_Z,            KC_X,            KC_C,            KC_V,                KC_PAST,          KC_P1,             KC_P2,             KC_P3,           KC_PCMM,          KC_RSFT,
                          XXXXXXX,     XXXXXXX,         KC_ENT,          KC_SPC,          KC_LALT,             KC_RALT,          KC_PENT,           KC_PEQL,           KC_PDOT,         XXXXXXX,
-                                                                        KC_LGUI,         KC_LCTL,             KC_RCTL,          XXXXXXX                                                  
+                                                                        KC_LGUI,         KC_LCTL,             KC_RCTL,          XXXXXXX
     )
 };
 
@@ -176,13 +176,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case S(CA_SLSH): return swap_key_event(S(KC_NONUS_BACKSLASH), record);
         case CA_PIPE: return swap_key_event(RALT(KC_MINUS), record);
 
+        // Suppress keys that confuse the selected OS.
         case KC_PAUSE:
         case KC_SCROLL_LOCK:
-            if (os_mode == MAC) {
-                // Suppress scroll lock on Mac. It just gets confused.
-                return false;
-            }
-            break;
+            return (os_mode != MAC);
 
         case LCTL_T(KC_TAB):
             if (os_mode == MAC && !record->tap.count) {
