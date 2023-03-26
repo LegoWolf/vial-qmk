@@ -17,7 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include QMK_KEYBOARD_H
-#include <stdio.h>
 #include <keymap_canadian_multilingual.h>
 
 typedef enum {
@@ -72,9 +71,9 @@ typedef enum {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT_split_3x6_3(
-      KC_ESC,          KC_Q,        KC_W,          TD(1),          KC_R,          KC_T,                TD(5),            TD(4),         TD(2),         TD(3),         KC_P,          KC_MINS,
-      MO(LAYER_SUPER), TD(0),       KC_S,          KC_D,           KC_F,          KC_G,                KC_H,             KC_J,          KC_K,          KC_L,          KC_SCLN,       MO(LAYER_SUPER),
-      OSM(MOD_LSFT),   KC_Z,        KC_X,          TD(6),          KC_V,          KC_B,                KC_N,             KC_M,          KC_COMMA,      KC_DOT,        CA_EACU,       OSM(MOD_RSFT),
+      KC_ESC,          KC_Q,        KC_W,          KC_E,           KC_R,          KC_T,                KC_Y,             KC_U,          KC_I,          KC_O,          KC_P,          KC_MINS,
+      MO(LAYER_SUPER), KC_A,        KC_S,          KC_D,           KC_F,          KC_G,                KC_H,             KC_J,          KC_K,          KC_L,          KC_SCLN,       MO(LAYER_SUPER),
+      OSM(MOD_LSFT),   KC_Z,        KC_X,          KC_C,           KC_V,          KC_B,                KC_N,             KC_M,          KC_COMMA,      KC_DOT,        CA_EACU,       OSM(MOD_RSFT),
                                                    FN_MO13,        KC_BSPC,       LCTL_T(KC_TAB),      KC_ENTER,         KC_SPACE,      FN_MO23
   ),
 
@@ -100,7 +99,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [LAYER_SUPER] = LAYOUT_split_3x6_3(
-      XXXXXXX,         XXXXXXX,     CA_DIAE,       CA_EGRV,        CA_GRV,        KC_INS,              KC_DEL,           CA_UGRV,       KC_GRV,        CA_CIRC,       KC_VBAR,       KC_EQL,
+      XXXXXXX,         XXXXXXX,     CA_DIAE,       CA_EGRV,        CA_GRV,        KC_INS,              KC_DEL,           CA_UGRV,       CA_SLSH,       CA_CIRC,       KC_VBAR,       KC_EQL,
       XXXXXXX,         CA_AGRV,     CA_DTIL,       CA_LABK,        CA_RABK,       CA_BSLS,             CA_SLSH,          CA_LCBR,       CA_RCBR,       CA_LBRC,       CA_RBRC,       CA_PLUS,
       KC_CAPS,         CA_LDAQ,     CA_RDAQ,       CA_CCED,        XXXXXXX,       XXXXXXX,             KC_APP,           OSM(MOD_LGUI), OSM(MOD_LCTL), OSM(MOD_LALT), OSM(MOD_RALT), KC_CAPS,
                                                    TG(LAYER_GAME), _______,       _______,             _______,          _______,       KC_OSMODE                                                  
@@ -901,13 +900,13 @@ void render_bootmagic_status(bool status) {
 }
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-  if (!is_keyboard_master()) {
-    return OLED_ROTATION_0;
-  }
+    if (!is_keyboard_master()) {
+        return OLED_ROTATION_0;
+    }
 #ifdef SHOW_GRAPHICS
-  return OLED_ROTATION_90;
+    return OLED_ROTATION_90;
 #else
-  return OLED_ROTATION_180; // flips the display 180 degrees if offhand
+    return OLED_ROTATION_180; // flips the display 180 degrees if offhand
 #endif
 }
 
@@ -974,7 +973,7 @@ void keyboard_post_init_user( void ) {
 #endif
 }
 
-void emit_key_event(uint16_t keycode, keyrecord_t *record)
+static void emit_key_event(uint16_t keycode, keyrecord_t *record)
 {
     if (record->event.pressed) {
         register_code16(keycode);
@@ -983,7 +982,7 @@ void emit_key_event(uint16_t keycode, keyrecord_t *record)
     }
 }
 
-bool swap_key_event(uint16_t keycode, keyrecord_t *record)
+static bool swap_key_event(uint16_t keycode, keyrecord_t *record)
 {
     if (os_mode == MAC) {
         emit_key_event(keycode, record);
@@ -992,9 +991,9 @@ bool swap_key_event(uint16_t keycode, keyrecord_t *record)
     return true;
 }
 
-bool send_deadkey_event(uint16_t deadkeycode, uint16_t keycode, keyrecord_t *record)
+static bool send_deadkey_event(uint16_t deadkeycode, uint16_t keycode, keyrecord_t *record)
 {
-    if( record->event.pressed ) {
+    if (record->event.pressed) {
         uint8_t mods = get_mods() & (MOD_MASK_SHIFT | MOD_BIT(KC_RALT));
         del_mods(mods);
         tap_code16(deadkeycode);
@@ -1030,11 +1029,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
 
         case KC_ANIMATE:
+#ifdef SHOW_GRAPHICS
             if (record->event.pressed) {
                 // Switch OS mode.
                 animate = !animate;
                 force_render = true;
             }
+#endif
             return false;
 
         case KC_MISSION_CONTROL:
