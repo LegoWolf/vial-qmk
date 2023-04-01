@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define KINETIC_SPEED
 
-#define DYNAMIC_KEYMAP_LAYER_COUNT 5
+#define DYNAMIC_KEYMAP_LAYER_COUNT 6
 
 #define VIAL_KEYBOARD_UID {0x55, 0x99, 0xA8, 0x3D, 0xE5, 0x2C, 0x16, 0x53}
 #define VIAL_UNLOCK_COMBO_ROWS {0, 1}
