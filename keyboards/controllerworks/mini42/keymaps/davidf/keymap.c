@@ -35,26 +35,22 @@ typedef enum {
 
 typedef enum {
 #ifdef VIA_ENABLE
-    KC_OSMODE = USER00,     // USER00
+    KC_OSMODE = QK_KB_0,    // QK_KB_00
 #else
     KC_OSMODE = SAFE_RANGE,
 #endif
-    KC_MISSION_CONTROL,     // USER01
-    KC_LAUNCHPAD,           // USER02
-    KC_ANIMATE,             // USER03
-    KC_A_CIRCUMFLEX,        // USER04
-    KC_E_CIRCUMFLEX,        // USER05
-    KC_E_DIAERESIS,         // USER06
-    KC_I_CIRCUMFLEX,        // USER07
-    KC_I_DIAERESIS,         // USER08
-    KC_O_CIRCUMFLEX,        // USER09
-    KC_U_CIRCUMFLEX,        // USER10
-    KC_U_DIAERESIS,         // USER11
-    KC_Y_DIAERESIS          // USER12
+    KC_ANIMATE,             // QK_KB_01
+    KC_A_CIRCUMFLEX,        // QK_KB_02
+    KC_E_CIRCUMFLEX,        // QK_KB_03
+    KC_E_DIAERESIS,         // QK_KB_04
+    KC_I_CIRCUMFLEX,        // QK_KB_05
+    KC_I_DIAERESIS,         // QK_KB_06
+    KC_O_CIRCUMFLEX,        // QK_KB_07
+    KC_U_CIRCUMFLEX,        // QK_KB_08
+    KC_U_DIAERESIS,         // QK_KB_09
+    KC_Y_DIAERESIS          // QK_KB_10
 } custom_keycodes_t;
 
-#define KC_MCTL KC_MISSION_CONTROL 
-#define KC_LPAD KC_LAUNCHPAD
 #define KC_ANIM KC_ANIMATE
 #define KC_ACIR KC_A_CIRCUMFLEX
 #define KC_ECIR KC_E_CIRCUMFLEX
@@ -72,7 +68,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_ESC,          KC_Q,        KC_W,          KC_E,           KC_R,          KC_T,                KC_Y,             KC_U,          KC_I,          KC_O,          KC_P,          KC_MINS,
       MO(LAYER_SUPER), KC_A,        KC_S,          KC_D,           KC_F,          KC_G,                KC_H,             KC_J,          KC_K,          KC_L,          KC_SCLN,       MO(LAYER_SUPER),
       OSM(MOD_LSFT),   KC_Z,        KC_X,          KC_C,           KC_V,          KC_B,                KC_N,             KC_M,          KC_COMM,       KC_DOT,        CA_EACU,       OSM(MOD_RSFT),
-                                                   FN_MO13,        KC_BSPC,       LCTL_T(KC_TAB),      KC_ENT,           KC_SPC,        FN_MO23
+                                                   TL_LOWR,        KC_BSPC,       LCTL_T(KC_TAB),      KC_ENT,           KC_SPC,        TL_UPPR
   ),
 
   [LAYER_NAV] = LAYOUT_split_3x6_3(
@@ -90,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [LAYER_FUNC] = LAYOUT_split_3x6_3(
-      XXXXXXX,         KC_F11,      KC_F12,        KC_F13,         KC_F14,        KC_F15,              KC_F16,           KC_BRID,       KC_BRIU,       KC_MCTL,       KC_LPAD,       XXXXXXX,
+      XXXXXXX,         KC_F11,      KC_F12,        KC_F13,         KC_F14,        KC_F15,              KC_F16,           KC_BRID,       KC_BRIU,       KC_MCTL,       KC_LPAD,       TG(LAYER_GAME),
       XXXXXXX,         KC_F1,       KC_F2,         KC_F3,          KC_F4,         KC_F5,               KC_F6,            KC_F7,         KC_F8,         KC_F9,         KC_F10,        XXXXXXX,
       _______,         KC_PAUS,     KC_PSCR,       KC_NUM,         KC_SCRL,       RGB_TOG,             RGB_MOD,          RGB_HUI,       RGB_SAI,       RGB_VAI,       RGB_SPI,       _______,
                                                    _______,        _______,       _______,             _______,          _______,       _______
@@ -100,7 +96,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       XXXXXXX,         XXXXXXX,     XXXXXXX,       CA_EGRV,        CA_DTIL,       KC_INS,              KC_DEL,           CA_UGRV,       CA_GRV,        CA_CIRC,       CA_DIAE,       KC_EQL,
       XXXXXXX,         CA_AGRV,     CA_PIPE,       CA_LABK,        CA_RABK,       CA_BSLS,             CA_SLSH,          CA_LCBR,       CA_RCBR,       CA_LBRC,       CA_RBRC,       CA_PLUS,
       KC_CAPS,         CA_LDAQ,     CA_RDAQ,       CA_CCED,        XXXXXXX,       XXXXXXX,             KC_APP,           OSM(MOD_LGUI), OSM(MOD_LCTL), OSM(MOD_LALT), OSM(MOD_RALT), KC_CAPS,
-                                                   TG(LAYER_GAME), _______,       _______,             _______,          _______,       KC_OSMODE
+                                                   _______,        _______,       _______,             _______,          _______,       KC_OSMODE
   ),
 
   [LAYER_GAME] = LAYOUT_split_3x6_3(
@@ -133,7 +129,7 @@ typedef struct {
     os_modes_t os_mode;
     layer_state_t default_layer;
     layer_state_t layer;
-    uint8_t leds;
+    led_t leds;
     uint8_t mods;
 } state_t;
 
@@ -184,7 +180,7 @@ static void oled_render_logo(void) {
 static void get_state( state_t *state ) {
     state->default_layer = get_highest_layer(default_layer_state);
     state->layer = get_highest_layer(layer_state);
-    state->leds = host_keyboard_leds();
+    state->leds = host_keyboard_led_state();
     state->mods = get_mods() | get_oneshot_mods();
     state->os_mode = os_mode;
 }
@@ -192,8 +188,13 @@ static void get_state( state_t *state ) {
 static bool has_state_changed( void ) {
     state_t state;
     get_state( &state );
-    return (current.os_mode != state.os_mode) || (current.leds != state.leds) || (current.mods != state.mods) ||
-        (current.default_layer != state.default_layer ) || (current.layer != state.layer);     
+    return (current.os_mode != state.os_mode) ||
+        (current.leds.caps_lock != state.leds.caps_lock) ||
+        (current.leds.num_lock != state.leds.num_lock) ||
+        (current.leds.scroll_lock != state.leds.scroll_lock) ||
+        (current.mods != state.mods) ||
+        (current.default_layer != state.default_layer ) ||
+        (current.layer != state.layer);     
 }
 
 static void update_state( void ) {
@@ -368,9 +369,9 @@ static void oled_gfx_render_leds(int x, int y) {
         0x00, 0x00, 0x1f, 0x3e, 0x3c, 0x3c, 0x32, 0x20, 0x20, 0x32, 0x3c, 0x3c, 0x3e, 0x1f, 0x00, 0x00
     };
 
-    oled_gfx_render_small_bitmap(x, y, bitmap_caps_lock, (current.leds & (1 << USB_LED_CAPS_LOCK)));
-    oled_gfx_render_small_bitmap(x + 3, y, bitmap_num_lock, (current.leds & (1 << USB_LED_NUM_LOCK)));
-    oled_gfx_render_small_bitmap(x, y + 2, bitmap_scroll_lock, (current.leds & (1 << USB_LED_SCROLL_LOCK)));
+    oled_gfx_render_small_bitmap(x, y, bitmap_caps_lock, current.leds.caps_lock);
+    oled_gfx_render_small_bitmap(x + 3, y, bitmap_num_lock, current.leds.num_lock);
+    oled_gfx_render_small_bitmap(x, y + 2, bitmap_scroll_lock, current.leds.scroll_lock);
 }
 
 static void oled_gfx_render_modes(int x, int y) {
@@ -864,9 +865,9 @@ void oled_render_layer_state(void) {
 void oled_render_leds(void) {
     static const char blank[] PROGMEM = "  ";
     oled_write_P(PSTR(" LEDs: "), false);
-    oled_write_P((current.leds & (1 << USB_LED_CAPS_LOCK)) ? PSTR("L ") : blank, false);
-    oled_write_P((current.leds & (1 << USB_LED_NUM_LOCK)) ? PSTR("N ") : blank, false);
-    oled_write_P((current.leds & (1 << USB_LED_SCROLL_LOCK)) ? PSTR("S ") : blank, false);
+    oled_write_P(current.leds.caps_lock ? PSTR("L ") : blank, false);
+    oled_write_P(current.leds.num_lock ? PSTR("N ") : blank, false);
+    oled_write_P(current.leds.scroll_lock ? PSTR("S ") : blank, false);
     oled_advance_page(true);
 }
 
@@ -1001,7 +1002,7 @@ static bool send_deadkey_event(uint16_t deadkeycode, uint16_t keycode, keyrecord
     return false;
 }
 
-void rgb_matrix_indicators_user(void) {
+bool rgb_matrix_indicators_user(void) {
     state_t state;
     get_state(&state);
     if(state.layer == LAYER_GAME) {
@@ -1015,6 +1016,7 @@ void rgb_matrix_indicators_user(void) {
         rgb_matrix_set_color(RGB_INDEX_F, rgb.r, rgb.g, rgb.b);
         rgb_matrix_set_color(RGB_INDEX_MINS, rgb.r, rgb.g, rgb.b);
     }
+    return false;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -1035,22 +1037,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
 #endif
             return false;
-
-        case KC_MISSION_CONTROL:
-            if (os_mode == MAC) {
-                // Send the mission control key command.
-                host_consumer_send(record->event.pressed ? 0x29F : 0);
-                return false;
-            }
-            break;
-
-        case KC_LAUNCHPAD:
-            if (os_mode == MAC) {
-                // Send the launch pad key command.
-                host_consumer_send(record->event.pressed ? 0x2A0 : 0);
-                return false;
-            }
-            break;
 
         // Single-stroke versions of keys that normally require deadkey composition.
         case KC_A_CIRCUMFLEX: return send_deadkey_event(CA_CIRC, KC_A, record);
